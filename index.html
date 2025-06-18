@@ -475,8 +475,11 @@ function calculateCalories() {
 }
 </script>
 </section>
+
+
 <script>
-let selectedGender = '';
+let selectedGender = "";
+
 function selectGender(gender) {
   selectedGender = gender;
   document.getElementById('gender').value = gender;
@@ -485,11 +488,6 @@ function selectGender(gender) {
   buttons.forEach(btn => btn.style.backgroundColor = '#00bcd4');
   if (gender === 'Мужчина') buttons[0].style.backgroundColor = '#007acc';
   else buttons[1].style.backgroundColor = '#c2185b';
-}
-
-function selectGender(gender) {
-  selectedGender = gender;
-  document.getElementById('gender').value = gender;
 }
 
 function sendRequest() {
@@ -526,38 +524,7 @@ function sendRequest() {
     document.getElementById('form-result').innerText = "Сетевая ошибка.";
   });
 }
-  const fullname = document.getElementById('fullname').value.trim();
-  const gender = selectedGender;
-  const goal = document.getElementById('goal').value.trim();
-
-  if (!fullname || !gender || !goal) {
-    document.getElementById('form-result').innerText = "Пожалуйста, заполните все поля.";
-    return;
-  }
-
-  const message = `Заявка на консультацию\nФИО: ${fullname}\nПол: ${gender}\nЦель: ${goal}`;
-  const chatId = "5147015707";
-  const token = "8151597381:AAHKjMpF8mgahcZedciS3lJUXxQmFT4BEa4";
-
-  fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
-      chat_id: chatId,
-      text: message
-    })
-  })
-  .then(response => {
-    if (response.ok) {
-      document.getElementById('form-result').innerText = "Заявка успешно отправлена!";
-    } else {
-      document.getElementById('form-result').innerText = "Ошибка при отправке.";
-    }
-  })
-  .catch(error => {
-    document.getElementById('form-result').innerText = "Сетевая ошибка.";
-  });
-}
 </script>
+
 </body>
 </html>
