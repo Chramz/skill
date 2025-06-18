@@ -320,33 +320,74 @@ body {
 </div>
 </div>
 </section>
-<section class="imt-calculator" id="imt">
-<h2>Калькулятор ИМТ</h2>
-<p>Введите рост и вес, чтобы узнать индекс массы тела:</p>
-<input id="height" placeholder="Рост (см)" type="number"/>
-<input id="weight" placeholder="Вес (кг)" type="number"/>
-<button onclick="calculateIMT()">Рассчитать</button>
-<p id="imt-result"></p>
-<section class="imt-calculator" id="calories">
-<h2>Калькулятор калорий</h2>
-<p>Рассчитайте суточную норму калорий в зависимости от цели:</p>
-<input id="age" placeholder="Возраст (лет)" type="number"/>
-<input id="heightCal" placeholder="Рост (см)" type="number"/>
-<input id="weightCal" placeholder="Вес (кг)" type="number"/>
-<select id="gender">
-<option value="male">Мужчина</option>
-<option value="female">Женщина</option>
-</select>
-<select id="activity">
-<option value="1.2">Минимальная активность</option>
-<option value="1.375">Лёгкие нагрузки (1-3 дня в неделю)</option>
-<option value="1.55">Умеренные нагрузки (3-5 дней)</option>
-<option value="1.725">Высокие нагрузки (6-7 дней)</option>
-<option value="1.9">Очень высокие нагрузки (2 раза в день)</option>
-</select>
-<button onclick="calculateCalories()">Рассчитать калории</button>
-<p id="calorie-result"></p>
+
+<section class="imt-calculator" id="calculator">
+  <h2>Калькулятор ИМТ и Калорий</h2>
+  <p>Введите свои данные для расчёта индекса массы тела и суточной нормы калорий:</p>
+
+  <input id="fullname_calc" placeholder="ФИО" type="text" /><br/>
+  <input id="age" placeholder="Возраст (лет)" type="number" />
+  <input id="height" placeholder="Рост (см)" type="number" />
+  <input id="weight" placeholder="Вес (кг)" type="number" /><br/>
+
+  <select id="gender">
+    <option value="male">Мужчина</option>
+    <option value="female">Женщина</option>
+  </select>
+
+  <select id="activity">
+    <option value="1.2">Минимальная активность</option>
+    <option value="1.375">Лёгкие нагрузки (1-3 дня в неделю)</option>
+    <option value="1.55">Умеренные нагрузки (3-5 дней)</option>
+    <option value="1.725">Высокие нагрузки (6-7 дней)</option>
+    <option value="1.9">Очень высокие нагрузки (2 раза в день)</option>
+  </select><br/><br/>
+
+  <button onclick="calculateCombined()">Рассчитать</button>
+  <p id="calc-result"></p>
 </section>
+
+<script>
+function calculateCombined() {
+  const height = parseFloat(document.getElementById('height').value) / 100;
+  const weight = parseFloat(document.getElementById('weight').value);
+  const age = parseInt(document.getElementById('age').value);
+  const gender = document.getElementById('gender').value;
+  const activity = parseFloat(document.getElementById('activity').value);
+
+  if (!height || !weight || !age || !activity) {
+    document.getElementById('calc-result').innerText = "Пожалуйста, заполните все поля.";
+    return;
+  }
+
+  const imt = (weight / (height * height)).toFixed(2);
+  let verdict = '';
+  if (imt < 18.5) verdict = 'Недостаточный вес';
+  else if (imt < 25) verdict = 'Норма';
+  else if (imt < 30) verdict = 'Избыточный вес';
+  else verdict = 'Ожирение';
+
+  let bmr;
+  if (gender === 'male') {
+    bmr = 10 * weight + 6.25 * (height * 100) - 5 * age + 5;
+  } else {
+    bmr = 10 * weight + 6.25 * (height * 100) - 5 * age - 161;
+  }
+
+  const maintenance = Math.round(bmr * activity);
+  const loss = Math.round(maintenance - 500);
+  const gain = Math.round(maintenance + 300);
+
+  document.getElementById('calc-result').innerText =
+    `Ваш ИМТ: ${imt} (${verdict})
+` +
+    `Поддержание веса: ${maintenance} ккал/день
+` +
+    `Для похудения: ${loss} ккал/день
+` +
+    `Для набора массы: ${gain} ккал/день`;
+}
+</script>
 
 <section class="imt-calculator" id="form">
 <h2>Оставить заявку на консультацию</h2>
