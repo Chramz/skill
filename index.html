@@ -323,7 +323,28 @@ body {
 <input id="weight" placeholder="Вес (кг)" type="number"/>
 <button onclick="calculateIMT()">Рассчитать</button>
 <p id="imt-result"></p>
+
+<section class="imt-calculator">
+  <h2>Калькулятор калорий</h2>
+  <p>Рассчитайте суточную норму калорий в зависимости от цели:</p>
+  <input id="age" type="number" placeholder="Возраст (лет)" />
+  <input id="heightCal" type="number" placeholder="Рост (см)" />
+  <input id="weightCal" type="number" placeholder="Вес (кг)" />
+  <select id="gender">
+    <option value="male">Мужчина</option>
+    <option value="female">Женщина</option>
+  </select>
+  <select id="activity">
+    <option value="1.2">Минимальная активность</option>
+    <option value="1.375">Лёгкие нагрузки (1-3 дня в неделю)</option>
+    <option value="1.55">Умеренные нагрузки (3-5 дней)</option>
+    <option value="1.725">Высокие нагрузки (6-7 дней)</option>
+    <option value="1.9">Очень высокие нагрузки (2 раза в день)</option>
+  </select>
+  <button onclick="calculateCalories()">Рассчитать калории</button>
+  <p id="calorie-result"></p>
 </section>
+
 <section class="testimonials">
 <h2>Отзывы клиентов</h2>
 <blockquote>“С Рамзилем я похудел на 12 кг за 3 месяца! Никогда не думал, что тренировки могут быть такими интересными.” — Артём, 29 лет</blockquote>
@@ -366,5 +387,37 @@ function calculateIMT() {
     });
   });
 </script>
+
+<script>
+function calculateCalories() {
+  const age = parseInt(document.getElementById('age').value);
+  const height = parseInt(document.getElementById('heightCal').value);
+  const weight = parseInt(document.getElementById('weightCal').value);
+  const gender = document.getElementById('gender').value;
+  const activity = parseFloat(document.getElementById('activity').value);
+
+  if (!age || !height || !weight || !activity) {
+    document.getElementById('calorie-result').innerText = 'Пожалуйста, заполните все поля.';
+    return;
+  }
+
+  let bmr;
+  if (gender === 'male') {
+    bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+  } else {
+    bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+  }
+
+  const maintenance = Math.round(bmr * activity);
+  const loss = Math.round(maintenance - 500);
+  const gain = Math.round(maintenance + 300);
+
+  document.getElementById('calorie-result').innerText =
+    `Поддержание веса: ${maintenance} ккал/день\n` +
+    `Для похудения: ${loss} ккал/день\n` +
+    `Для набора массы: ${gain} ккал/день`;
+}
+</script>
+
 </body>
 </html>
