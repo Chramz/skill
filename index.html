@@ -202,13 +202,78 @@
       font-weight: bold;
       color: #b2ebf2;
     }
-    </style>
+    
+/* AOS animation default (already animated blocks may get this by default) */
+[data-aos] {
+  opacity: 0;
+  transition-property: opacity, transform;
+}
+
+body {
+  cursor: url('https://cur.cursors-4u.net/cursors/cur-13/cur1163.cur'), auto;
+}
+
+.cta-button:hover {
+  box-shadow: 0 0 15px #00bcd4;
+  transform: scale(1.05);
+}
+
+/* FAQ Accordion styles */
+.faq-question {
+  background: none;
+  color: #00bcd4;
+  font-weight: bold;
+  border: none;
+  width: 100%;
+  text-align: left;
+  font-size: 1.1rem;
+  padding: 1rem;
+  cursor: pointer;
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.faq-item.active .faq-answer {
+  max-height: 200px;
+  padding: 0 1rem 1rem;
+}
+
+/* Ticker (running text) */
+.ticker {
+  width: 100%;
+  overflow: hidden;
+  background: #263238;
+  color: #4dd0e1;
+  white-space: nowrap;
+}
+
+.ticker p {
+  display: inline-block;
+  padding-left: 100%;
+  animation: scrollText 15s linear infinite;
+}
+
+@keyframes scrollText {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-100%); }
+}
+</style>
+
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
 </head>
 <body>
 <header>
 <h1><span class="highlighted-title">Skill Up</span></h1>
 <p>Твой путь к лучшей версии себя</p>
 </header>
+<div class="ticker">
+<p>Индивидуальный подход • Онлайн • Результат гарантирован •</p>
+</div>
+
 <section class="intro">
 <h2>Привет, я Рамзиль 👋</h2>
 <p>Мне 20 лет, я сертифицированный фитнес-тренер, который сам прошёл путь от "жру всё подряд" до "6 кубиков и уверенность в себе". Работаю индивидуально с каждым: подбираю тренировки, питание и ментальный настрой. Увлекаюсь биохакингом, спортивной физиологией и иногда делаю берпи под любимый хардбас.</p>
@@ -225,31 +290,33 @@
 <li><strong>Воскресенье:</strong> Полный отдых или йога</li>
 </ul>
 </section>
+
 <section class="faq">
 <h2>Популярные вопросы</h2>
-<div class="faq-cards">
-<div class="card">
-<h3>Сколько стоит персональная тренировка?</h3>
-<p>Первая консультация — бесплатно. Далее от 1000₽ за тренировку, завися от цели и формата.</p>
+<div class="faq-accordion">
+<div class="faq-item">
+<button class="faq-question">Сколько стоит персональная тренировка?</button>
+<div class="faq-answer"><p>Первая консультация — бесплатно. Далее от 1000₽ за тренировку, завися от цели и формата.</p></div>
 </div>
-<div class="card">
-<h3>Можно ли тренироваться онлайн?</h3>
-<p>Да! Провожу тренировки и консультации через Zoom или Telegram.</p>
+<div class="faq-item">
+<button class="faq-question">Можно ли тренироваться онлайн?</button>
+<div class="faq-answer"><p>Да! Провожу тренировки и консультации через Zoom или Telegram.</p></div>
 </div>
-<div class="card">
-<h3>Составляешь ли ты питание?</h3>
-<p>Да, питание подбираю строго индивидуально, с учётом целей, аллергий и образа жизни.</p>
+<div class="faq-item">
+<button class="faq-question">Составляешь ли ты питание?</button>
+<div class="faq-answer"><p>Да, питание подбираю строго индивидуально, с учётом целей, аллергий и образа жизни.</p></div>
 </div>
-<div class="card">
-<h3>А если у меня проблемы со здоровьем?</h3>
-<p>Все программы адаптируются под ограничения. Работаю совместно с врачами, если нужно.</p>
+<div class="faq-item">
+<button class="faq-question">А если у меня проблемы со здоровьем?</button>
+<div class="faq-answer"><p>Все программы адаптируются под ограничения. Работаю совместно с врачами, если нужно.</p></div>
 </div>
-<div class="card">
-<h3>Нужно ли оборудование?</h3>
-<p>Нет. Могу подобрать программу и без оборудования, с тренировками дома или на улице.</p>
+<div class="faq-item">
+<button class="faq-question">Нужно ли оборудование?</button>
+<div class="faq-answer"><p>Нет. Могу подобрать программу и без оборудования, с тренировками дома или на улице.</p></div>
 </div>
 </div>
-</section><section class="imt-calculator">
+</section>
+<section class="imt-calculator">
 <h2>Калькулятор ИМТ</h2>
 <p>Введите рост и вес, чтобы узнать индекс массы тела:</p>
 <input id="height" placeholder="Рост (см)" type="number"/>
@@ -287,5 +354,17 @@ function calculateIMT() {
 
   document.getElementById('imt-result').innerText = `Ваш ИМТ: ${imt} (${verdict})`;
 }
-</script></body>
+</script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init();
+</script>
+<script>
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.parentElement.classList.toggle('active');
+    });
+  });
+</script>
+</body>
 </html>
